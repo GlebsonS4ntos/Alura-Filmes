@@ -1,6 +1,7 @@
 ﻿using Alura.Data;
 using Alura.Data.DTOs;
 using Alura.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,22 +14,19 @@ namespace Alura.Controllers
     public class FilmeController : ControllerBase
     {
         private FilmeContext _context;
+        private IMapper _mapper;
 
-        public FilmeController(FilmeContext context)
+        public FilmeController(FilmeContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpPost]
         public IActionResult CadastrarFilme([FromBody]CreateFilmeDTO filmeDTO)
         {
-            Filme filme = new()
-            {
-                FilmeName = filmeDTO.FilmeName,
-                Duracao = filmeDTO.Duracao,
-                Genero = filmeDTO.Genero,
-                Diretor = filmeDTO.Diretor
-            };
+            //conversão usando o mapper, de um createdFilmeDTO para o tipo Filme
+            Filme filme = _mapper.Map<Filme>(filmeDTO);
             _context.Filmes.Add(filme);
             _context.SaveChanges();
             return CreatedAtAction(nameof(BuscarFilmePorId), new {Id = filme.FilmeId}, filme);
@@ -46,16 +44,7 @@ namespace Alura.Controllers
             Filme f =  _context.Filmes.FirstOrDefault(x => x.FilmeId == id);
             if(f != null)
             {
-                HeadFilmeDTO filmeDTO = new() 
-                { 
-                    FilmeId = f.FilmeId,
-                    Duracao = f.Duracao,
-                    Diretor = f.Diretor,
-                    Genero = f.Genero,
-                    FilmeName = f.FilmeName,
-                    DataConsulta = DateTime.Now
-                };
-
+                HeadFilmeDTO filmeDTO = _mapper.Map<HeadFilmeDTO>(f);
                 return Ok(filmeDTO);
             }
             return NotFound();
@@ -69,10 +58,7 @@ namespace Alura.Controllers
             {
                 return NotFound();
             }
-            f.FilmeName = filmeDTO.FilmeName;
-            f.Duracao = filmeDTO.Duracao;
-            f.Diretor = filmeDTO.Diretor;
-            f.Genero = filmeDTO.Genero;
+            _mapper.Map(filmeDTO, f); //jogando as informações do filmeDTO pra o f
 
             _context.SaveChanges();
             return NoContent();

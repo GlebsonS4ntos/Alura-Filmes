@@ -15,6 +15,6 @@ namespace Alura.Data.DTOs
         [Required(ErrorMessage = "A duracao é obrigatoria")]
         [Range(1, 10, ErrorMessage = "A duração deve ser entre 1 a 10 horas.")]
         public int Duracao { get; set; }
-        public DateTime DataConsulta { get; set; } 
+        public DateTime DataConsulta { get; set; } = DateTime.Now;
     }
 }

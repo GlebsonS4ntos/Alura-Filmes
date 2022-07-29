@@ -36,6 +36,7 @@ namespace Alura
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Alura", Version = "v1" });
             });
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //configuração do auto mapper
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
