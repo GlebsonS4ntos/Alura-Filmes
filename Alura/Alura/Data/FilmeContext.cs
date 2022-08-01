@@ -8,5 +8,6 @@ namespace Alura.Data
         public FilmeContext(DbContextOptions<FilmeContext> otp) : base(otp){}
 
         public DbSet<Filme> Filmes { get; set; }
+        public DbSet<Cinema> Cinemas { get; set; }
     }
 }

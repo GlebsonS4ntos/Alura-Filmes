@@ -72,7 +72,7 @@ namespace Alura.Controllers
             {
                 return NotFound();
             }
-            _context.Remove(f);
+            _context.Filmes.Remove(f);
             _context.SaveChanges();
             return NoContent();
         }
