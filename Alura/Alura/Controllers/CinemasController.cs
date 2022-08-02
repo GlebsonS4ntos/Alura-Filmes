@@ -1,6 +1,7 @@
 ﻿using Alura.Data;
 using Alura.Data.DTOs.CinemaDTOs;
 using Alura.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,11 +13,13 @@ namespace Alura.Controllers
     [Route("[controller]")]
     public class CinemasController : ControllerBase
     {
-        private readonly FilmeContext _context;
+        private FilmeContext _context;
+        private IMapper _mapper; 
 
-        public CinemasController(FilmeContext context)
+        public CinemasController(FilmeContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -33,21 +36,14 @@ namespace Alura.Controllers
             {
                 return NotFound();
             }
-            HeadCinemaDTO cinemaDto = new()
-            {
-                CinemaId = cinema.CinemaId,
-                CinemaName = cinema.CinemaName
-            };
+            HeadCinemaDTO cinemaDto = _mapper.Map<HeadCinemaDTO>(cinema); 
             return Ok(cinemaDto);
         }
 
         [HttpPost]
         public IActionResult AdicionarCinema([FromBody]CreatedCinemaDTO c)
         {
-            Cinema cinema = new()
-            {
-                CinemaName = c.CinemaName
-            };
+            Cinema cinema = _mapper.Map<Cinema>(c);
             _context.Cinemas.Add(cinema);
             _context.SaveChanges();
             return CreatedAtAction(nameof(BuscaCinemaId), new {Id = cinema.CinemaId }, cinema);
@@ -61,7 +57,7 @@ namespace Alura.Controllers
             {
                 return NotFound();
             }
-            cinema.CinemaName = c.CinemaName;
+            _mapper.Map(c, cinema);
             _context.SaveChanges();
             return NoContent();
         }
