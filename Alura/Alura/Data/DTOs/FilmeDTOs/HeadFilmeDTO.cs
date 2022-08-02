@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace Alura.Data.DTOs
+namespace Alura.Data.DTOs.FilmeDTOs
 {
-    public class UpdateFilmeDTO
+    public class HeadFilmeDTO
     {
+        [Key]
+        [Required]
+        public int FilmeId { get; set; }
         [Required(ErrorMessage = "Campo Nome é Obrigatorio")]
         public string FilmeName { get; set; }
         [StringLength(100, ErrorMessage = "O nome do diretor não deve ter mais que 100 caracteres")]
@@ -13,5 +17,6 @@ namespace Alura.Data.DTOs
         [Required(ErrorMessage = "A duracao é obrigatoria")]
         [Range(1, 10, ErrorMessage = "A duração deve ser entre 1 a 10 horas.")]
         public int Duracao { get; set; }
+        public DateTime DataConsulta { get; set; } = DateTime.Now;
     }
 }

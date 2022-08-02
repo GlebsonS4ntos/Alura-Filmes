@@ -1,5 +1,6 @@
 ﻿using Alura.Data;
 using Alura.Data.DTOs;
+using Alura.Data.DTOs.FilmeDTOs;
 using Alura.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;

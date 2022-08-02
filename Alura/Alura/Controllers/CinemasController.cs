@@ -1,4 +1,5 @@
 ﻿using Alura.Data;
+using Alura.Data.DTOs.CinemaDTOs;
 using Alura.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
@@ -32,19 +33,28 @@ namespace Alura.Controllers
             {
                 return NotFound();
             }
-            return Ok(cinema);
+            HeadCinemaDTO cinemaDto = new()
+            {
+                CinemaId = cinema.CinemaId,
+                CinemaName = cinema.CinemaName
+            };
+            return Ok(cinemaDto);
         }
 
         [HttpPost]
-        public IActionResult AdicionarCinema([FromBody] Cinema c)
+        public IActionResult AdicionarCinema([FromBody]CreatedCinemaDTO c)
         {
-            _context.Cinemas.Add(c);
+            Cinema cinema = new()
+            {
+                CinemaName = c.CinemaName
+            };
+            _context.Cinemas.Add(cinema);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(BuscaCinemaId), new {Id = c.CinemaId }, c);
+            return CreatedAtAction(nameof(BuscaCinemaId), new {Id = cinema.CinemaId }, cinema);
         }
 
         [HttpPut("{id}")]
-        public IActionResult AtualizarCinema(int id, [FromBody] Cinema c)
+        public IActionResult AtualizarCinema(int id, [FromBody] UpdateCinemaDTO c)
         {
             Cinema cinema = _context.Cinemas.FirstOrDefault(x => x.CinemaId == id);
             if(cinema == null)
