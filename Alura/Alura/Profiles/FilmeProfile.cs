@@ -1,5 +1,4 @@
-﻿using Alura.Data.DTOs;
-using Alura.Data.DTOs.FilmeDTOs;
+﻿using Alura.Data.DTOs.FilmeDTOs;
 using Alura.Models;
 using AutoMapper;
 
