@@ -29,7 +29,7 @@ namespace Alura
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<FilmeContext>(
-                x => x.UseSqlServer(Configuration.GetConnectionString("FilmeConnection"))
+                x => x.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("FilmeConnection"))
                 );
             services.AddControllers();
             services.AddSwaggerGen(c =>

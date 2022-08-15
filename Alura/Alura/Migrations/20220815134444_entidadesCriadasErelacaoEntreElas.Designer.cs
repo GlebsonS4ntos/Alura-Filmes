@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alura.Migrations
 {
     [DbContext(typeof(FilmeContext))]
-    [Migration("20220801130731_EntidadeCinema")]
-    partial class EntidadeCinema
+    [Migration("20220815134444_entidadesCriadasErelacaoEntreElas")]
+    partial class entidadesCriadasErelacaoEntreElas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,9 +32,40 @@ namespace Alura.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("EnderecoId")
+                        .HasColumnType("int");
+
                     b.HasKey("CinemaId");
 
+                    b.HasIndex("EnderecoId")
+                        .IsUnique();
+
                     b.ToTable("Cinemas");
+                });
+
+            modelBuilder.Entity("Alura.Models.Endereco", b =>
+                {
+                    b.Property<int>("EnderecoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Bairro")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Logradouro")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Numero")
+                        .HasColumnType("int");
+
+                    b.HasKey("EnderecoId");
+
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("Alura.Models.Filme", b =>
@@ -62,6 +93,22 @@ namespace Alura.Migrations
                     b.HasKey("FilmeId");
 
                     b.ToTable("Filmes");
+                });
+
+            modelBuilder.Entity("Alura.Models.Cinema", b =>
+                {
+                    b.HasOne("Alura.Models.Endereco", "Endereco")
+                        .WithOne("Cinema")
+                        .HasForeignKey("Alura.Models.Cinema", "EnderecoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Endereco");
+                });
+
+            modelBuilder.Entity("Alura.Models.Endereco", b =>
+                {
+                    b.Navigation("Cinema");
                 });
 #pragma warning restore 612, 618
         }

@@ -30,7 +30,13 @@ namespace Alura.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("EnderecoId")
+                        .HasColumnType("int");
+
                     b.HasKey("CinemaId");
+
+                    b.HasIndex("EnderecoId")
+                        .IsUnique();
 
                     b.ToTable("Cinemas");
                 });
@@ -85,6 +91,22 @@ namespace Alura.Migrations
                     b.HasKey("FilmeId");
 
                     b.ToTable("Filmes");
+                });
+
+            modelBuilder.Entity("Alura.Models.Cinema", b =>
+                {
+                    b.HasOne("Alura.Models.Endereco", "Endereco")
+                        .WithOne("Cinema")
+                        .HasForeignKey("Alura.Models.Cinema", "EnderecoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Endereco");
+                });
+
+            modelBuilder.Entity("Alura.Models.Endereco", b =>
+                {
+                    b.Navigation("Cinema");
                 });
 #pragma warning restore 612, 618
         }
