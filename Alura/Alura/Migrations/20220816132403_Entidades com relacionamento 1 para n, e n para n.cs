@@ -2,7 +2,7 @@
 
 namespace Alura.Migrations
 {
-    public partial class entidadesCriadasErelacaoEntreElas : Migration
+    public partial class Entidadescomrelacionamento1paranenparan : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -38,13 +38,28 @@ namespace Alura.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Gerentes",
+                columns: table => new
+                {
+                    GerenteId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GerenteName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CPF = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Gerentes", x => x.GerenteId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cinemas",
                 columns: table => new
                 {
                     CinemaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CinemaName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    EnderecoId = table.Column<int>(type: "int", nullable: false)
+                    EnderecoId = table.Column<int>(type: "int", nullable: false),
+                    GerenteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,7 +69,13 @@ namespace Alura.Migrations
                         column: x => x.EnderecoId,
                         principalTable: "Enderecos",
                         principalColumn: "EnderecoId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cinemas_Gerentes_GerenteId",
+                        column: x => x.GerenteId,
+                        principalTable: "Gerentes",
+                        principalColumn: "GerenteId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -62,6 +83,11 @@ namespace Alura.Migrations
                 table: "Cinemas",
                 column: "EnderecoId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cinemas_GerenteId",
+                table: "Cinemas",
+                column: "GerenteId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -74,6 +100,9 @@ namespace Alura.Migrations
 
             migrationBuilder.DropTable(
                 name: "Enderecos");
+
+            migrationBuilder.DropTable(
+                name: "Gerentes");
         }
     }
 }

@@ -33,10 +33,15 @@ namespace Alura.Migrations
                     b.Property<int>("EnderecoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("GerenteId")
+                        .HasColumnType("int");
+
                     b.HasKey("CinemaId");
 
                     b.HasIndex("EnderecoId")
                         .IsUnique();
+
+                    b.HasIndex("GerenteId");
 
                     b.ToTable("Cinemas");
                 });
@@ -93,6 +98,27 @@ namespace Alura.Migrations
                     b.ToTable("Filmes");
                 });
 
+            modelBuilder.Entity("Alura.Models.Gerente", b =>
+                {
+                    b.Property<int>("GerenteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CPF")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GerenteName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("GerenteId");
+
+                    b.ToTable("Gerentes");
+                });
+
             modelBuilder.Entity("Alura.Models.Cinema", b =>
                 {
                     b.HasOne("Alura.Models.Endereco", "Endereco")
@@ -101,12 +127,25 @@ namespace Alura.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Alura.Models.Gerente", "Gerente")
+                        .WithMany("Cinemas")
+                        .HasForeignKey("GerenteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Endereco");
+
+                    b.Navigation("Gerente");
                 });
 
             modelBuilder.Entity("Alura.Models.Endereco", b =>
                 {
                     b.Navigation("Cinema");
+                });
+
+            modelBuilder.Entity("Alura.Models.Gerente", b =>
+                {
+                    b.Navigation("Cinemas");
                 });
 #pragma warning restore 612, 618
         }
