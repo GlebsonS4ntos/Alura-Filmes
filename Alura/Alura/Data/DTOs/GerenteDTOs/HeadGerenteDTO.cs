@@ -12,7 +12,7 @@ namespace Alura.Data.DTOs.GerenteDTOs
         public string GerenteName { get; set; }
         [Required(ErrorMessage = "Campo CPF Obrigatorio !!")]
         public string CPF { get; set; }
-        public ICollection<Cinema> Cinemas { get; set; }
+        public object Cinemas { get; set; }
         public DateTime DataConsulta { get; set; } = DateTime.Now;
     }
 }
