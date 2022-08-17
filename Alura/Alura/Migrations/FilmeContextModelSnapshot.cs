@@ -130,7 +130,7 @@ namespace Alura.Migrations
                     b.HasOne("Alura.Models.Gerente", "Gerente")
                         .WithMany("Cinemas")
                         .HasForeignKey("GerenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Endereco");

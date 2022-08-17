@@ -2,7 +2,7 @@
 
 namespace Alura.Migrations
 {
-    public partial class Entidadescomrelacionamento1paranenparan : Migration
+    public partial class Todasasentidadesrelacionadascomrelacao1parane1para1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -75,7 +75,7 @@ namespace Alura.Migrations
                         column: x => x.GerenteId,
                         principalTable: "Gerentes",
                         principalColumn: "GerenteId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

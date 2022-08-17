@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alura.Migrations
 {
     [DbContext(typeof(FilmeContext))]
-    [Migration("20220816132403_Entidades com relacionamento 1 para n, e n para n")]
-    partial class Entidadescomrelacionamento1paranenparan
+    [Migration("20220817003358_Todas as entidades relacionadas com relacao 1 para n e 1 para 1")]
+    partial class Todasasentidadesrelacionadascomrelacao1parane1para1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -132,7 +132,7 @@ namespace Alura.Migrations
                     b.HasOne("Alura.Models.Gerente", "Gerente")
                         .WithMany("Cinemas")
                         .HasForeignKey("GerenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Endereco");
