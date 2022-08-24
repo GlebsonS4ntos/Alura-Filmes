@@ -23,9 +23,23 @@ namespace Alura.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Cinema> BuscarCinemas()
+        public IActionResult BuscarCinemas([FromQuery] string nomeFilme)
         {
-            return _context.Cinemas;
+            List<Cinema> cinemas = _context.Cinemas.ToList();
+            if(cinemas == null)
+            {
+                return NotFound();
+            }
+            if (!string.IsNullOrEmpty(nomeFilme))
+            {
+                IEnumerable<Cinema> query = from cinema in cinemas
+                        where cinema.Sessoes.Any(sessao => 
+                        sessao.Filme.FilmeName.ToUpper() == nomeFilme.ToUpper())
+                        select cinema;
+                cinemas = query.ToList();
+            }
+            List<HeadCinemaDTO> headDTO = _mapper.Map<List<HeadCinemaDTO>>(cinemas);
+            return Ok(headDTO);
         }
 
         [HttpGet("{id}")]

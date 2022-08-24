@@ -10,6 +10,8 @@ namespace Alura.Data.DTOs.FilmeDTOs
         public string Diretor { get; set; }
         [StringLength(20, ErrorMessage = "O genero não deve possuir mais que 20 caracteres")]
         public string Genero { get; set; }
+        [Required]
+        public int ClassificacaoEtaria { get; set; }
         [Required(ErrorMessage = "A duracao é obrigatoria")]
         [Range(1, 10, ErrorMessage = "A duração deve ser entre 1 a 10 horas.")]
         public int Duracao { get; set; }

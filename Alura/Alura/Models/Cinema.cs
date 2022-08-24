@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Alura.Models;
 
@@ -16,5 +17,7 @@ namespace Alura.Models
         public virtual Gerente Gerente { get; set; }
         [Required]
         public int GerenteId { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Sessao> Sessoes { get; set; }
     }
 }

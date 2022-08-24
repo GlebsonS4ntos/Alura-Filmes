@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Alura.Models
 {
@@ -14,5 +16,9 @@ namespace Alura.Models
         [Required(ErrorMessage = "A duracao é obrigatoria")]
         [Range(1, 10, ErrorMessage = "A duração deve ser entre 1 a 10 horas.")]
         public int Duracao { get; set; }
+        [Required]
+        public int ClassificacaoEtaria { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Sessao> Sessoes { get; set; }
     }
 }

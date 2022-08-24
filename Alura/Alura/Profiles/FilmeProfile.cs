@@ -1,6 +1,7 @@
 ﻿using Alura.Data.DTOs.FilmeDTOs;
 using Alura.Models;
 using AutoMapper;
+using System.Linq;
 
 namespace Alura.Profiles
 {

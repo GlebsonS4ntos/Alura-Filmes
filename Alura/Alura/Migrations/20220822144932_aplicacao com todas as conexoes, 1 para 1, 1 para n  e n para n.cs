@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Alura.Migrations
 {
-    public partial class Todasasentidadesrelacionadascomrelacao1parane1para1 : Migration
+    public partial class aplicacaocomtodasasconexoes1para11paranenparan : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -78,6 +79,33 @@ namespace Alura.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Sessoes",
+                columns: table => new
+                {
+                    SessaoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CinemaId = table.Column<int>(type: "int", nullable: false),
+                    FilmeId = table.Column<int>(type: "int", nullable: false),
+                    HorariodeEncerramentoDaSessao = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sessoes", x => x.SessaoId);
+                    table.ForeignKey(
+                        name: "FK_Sessoes_Cinemas_CinemaId",
+                        column: x => x.CinemaId,
+                        principalTable: "Cinemas",
+                        principalColumn: "CinemaId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Sessoes_Filmes_FilmeId",
+                        column: x => x.FilmeId,
+                        principalTable: "Filmes",
+                        principalColumn: "FilmeId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Cinemas_EnderecoId",
                 table: "Cinemas",
@@ -88,10 +116,23 @@ namespace Alura.Migrations
                 name: "IX_Cinemas_GerenteId",
                 table: "Cinemas",
                 column: "GerenteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sessoes_CinemaId",
+                table: "Sessoes",
+                column: "CinemaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sessoes_FilmeId",
+                table: "Sessoes",
+                column: "FilmeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Sessoes");
+
             migrationBuilder.DropTable(
                 name: "Cinemas");
 

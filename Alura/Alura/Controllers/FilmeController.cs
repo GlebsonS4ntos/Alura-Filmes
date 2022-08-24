@@ -33,9 +33,23 @@ namespace Alura.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Filme> ListarFilme()
+        public IActionResult ListarFilme([FromQuery] int? classificacaoIndicativa = null)
         {
-            return _context.Filmes;
+            List<Filme> filmes;
+            if (classificacaoIndicativa == null)
+            {
+                filmes = _context.Filmes.ToList();
+            }
+            else{
+                filmes = _context.Filmes.Where(x => x.ClassificacaoEtaria <= classificacaoIndicativa).ToList();
+            }
+
+            if (filmes != null)
+            {
+                List<HeadFilmeDTO> headDto = _mapper.Map<List<HeadFilmeDTO>>(filmes);
+                return Ok(headDto);
+            }
+            return NoContent();
         }
 
         [HttpGet("{id}")]

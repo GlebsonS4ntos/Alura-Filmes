@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Alura.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Alura.Data.DTOs.FilmeDTOs
@@ -17,6 +19,9 @@ namespace Alura.Data.DTOs.FilmeDTOs
         [Required(ErrorMessage = "A duracao é obrigatoria")]
         [Range(1, 10, ErrorMessage = "A duração deve ser entre 1 a 10 horas.")]
         public int Duracao { get; set; }
+        [Required]
+        public int ClassificacaoEtaria { get; set; }
         public DateTime DataConsulta { get; set; } = DateTime.Now;
+
     }
 }

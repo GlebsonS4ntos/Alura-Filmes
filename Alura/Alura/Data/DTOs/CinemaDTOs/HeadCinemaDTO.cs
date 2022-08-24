@@ -1,5 +1,6 @@
 ﻿using Alura.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Alura.Data.DTOs.CinemaDTOs
@@ -14,6 +15,7 @@ namespace Alura.Data.DTOs.CinemaDTOs
         public string CinemaName { get; set; }
         public Endereco Endereco { get; set;}
         public Gerente Gerente { get; set; }
+        public ICollection<Sessao> Sessoes { get; set; }
         public DateTime DataConsulta { get; set; } = DateTime.Now;
     }
 }
