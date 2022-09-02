@@ -40,8 +40,8 @@ namespace Alura.Controllers
         public IActionResult BuscarEnderecoPorId(int id)
         {
             HeadEnderecoDTO dto = _service.BuscarEnderecoId(id);
-            if (dto == null) return NoContent();
-            return NotFound();
+            if (dto == null) return NotFound();
+            return Ok(dto);
         }
 
         [HttpPut("{id}")]

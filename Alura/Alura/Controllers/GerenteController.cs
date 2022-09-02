@@ -26,7 +26,7 @@ namespace Alura.Controllers
         {
             List<HeadGerenteDTO> dtos = _service.ListarGerentes();
             if(dtos == null) return NotFound();
-            return Ok();
+            return Ok(dtos);
         }
 
         [HttpGet("{id}")]
@@ -48,7 +48,7 @@ namespace Alura.Controllers
         public IActionResult AtualizarGerente(int id, [FromBody] UpdateGerenteDTO updateDto)
         {
             Result resultado = _service.AtualizarGerente(id, updateDto);
-            if(resultado != null) return NoContent();
+            if(resultado.IsSuccess) return NoContent();
             return NotFound();
         }
 
@@ -57,7 +57,7 @@ namespace Alura.Controllers
         public IActionResult DeletarGerente(int id)
         {
             Result resultado = _service.DeletarGerente(id);
-            if(resultado != null ) return NoContent();
+            if(resultado.IsSuccess) return NoContent();
             return NotFound();
         }
     }
