@@ -1,4 +1,5 @@
 using Alura.Data;
+using Alura.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +32,11 @@ namespace Alura
             services.AddDbContext<FilmeContext>(
                 x => x.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("FilmeConnection"))
                 );
+            services.AddScoped<FilmeService, FilmeService>();
+            services.AddScoped<CinemaService, CinemaService>();
+            services.AddScoped<GerenteService, GerenteService>();
+            services.AddScoped<SessaoService, SessaoService>();
+            services.AddScoped<EnderecoService, EnderecoService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

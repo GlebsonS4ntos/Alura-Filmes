@@ -7,6 +7,7 @@ namespace Alura.Data.DTOs.GerenteDTOs
 {
     public class HeadGerenteDTO
     {
+        public int GerenteId { get; set; }
         [Required(ErrorMessage = "Campo nome requerido")]
         [StringLength(50, ErrorMessage = "Tamanho maximo do nome de 50 caracteres")]
         public string GerenteName { get; set; }

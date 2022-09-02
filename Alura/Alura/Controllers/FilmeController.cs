@@ -1,7 +1,9 @@
 ﻿using Alura.Data;
 using Alura.Data.DTOs.FilmeDTOs;
 using Alura.Models;
+using Alura.Services;
 using AutoMapper;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,81 +15,49 @@ namespace Alura.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private FilmeContext _context;
-        private IMapper _mapper;
-
-        public FilmeController(FilmeContext context, IMapper mapper)
+        public FilmeService _service;
+        public FilmeController(FilmeService service)
         {
-            _context = context;
-            _mapper = mapper;
+            _service = service;
         }
 
         [HttpPost]
         public IActionResult CadastrarFilme([FromBody]CreateFilmeDTO filmeDTO)
         {
             //conversão usando o mapper, de um createdFilmeDTO para o tipo Filme
-            Filme filme = _mapper.Map<Filme>(filmeDTO);
-            _context.Filmes.Add(filme);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(BuscarFilmePorId), new {Id = filme.FilmeId}, filme);
+            HeadFilmeDTO filmeDto = _service.AdicionarFilme(filmeDTO);
+            return CreatedAtAction(nameof(BuscarFilmePorId), new {Id = filmeDto.FilmeId}, filmeDto);
         }
 
         [HttpGet]
         public IActionResult ListarFilme([FromQuery] int? classificacaoIndicativa = null)
         {
-            List<Filme> filmes;
-            if (classificacaoIndicativa == null)
-            {
-                filmes = _context.Filmes.ToList();
-            }
-            else{
-                filmes = _context.Filmes.Where(x => x.ClassificacaoEtaria <= classificacaoIndicativa).ToList();
-            }
-
-            if (filmes != null)
-            {
-                List<HeadFilmeDTO> headDto = _mapper.Map<List<HeadFilmeDTO>>(filmes);
-                return Ok(headDto);
-            }
+            List<HeadFilmeDTO> filmesDTO = _service.ListarFilme(classificacaoIndicativa);
+            if(filmesDTO != null) return Ok(filmesDTO);
             return NoContent();
         }
 
         [HttpGet("{id}")]
         public IActionResult BuscarFilmePorId(int id)
         {
-            Filme f =  _context.Filmes.FirstOrDefault(x => x.FilmeId == id);
-            if(f != null)
-            {
-                HeadFilmeDTO filmeDTO = _mapper.Map<HeadFilmeDTO>(f);
-                return Ok(filmeDTO);
-            }
+            HeadFilmeDTO headFilme = _service.BuscarFilmePorId(id);
+            if(headFilme != null) return Ok(headFilme);
             return NotFound();
         }
 
         [HttpPut("{id}")]
         public IActionResult AtualizarFilme(int id, [FromBody] UpdateFilmeDTO filmeDTO)
         {
-            Filme f = _context.Filmes.FirstOrDefault(x => x.FilmeId == id);
-            if(f == null)
-            {
-                return NotFound();
-            }
-            _mapper.Map(filmeDTO, f); //jogando as informações do filmeDTO pra o f
-
-            _context.SaveChanges();
+            Result resultado = _service.AtualizarFilme(filmeDTO, id);
+            if(resultado.IsFailed) return NotFound();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult RemoverFilme(int id)
         {
-            Filme f = _context.Filmes.FirstOrDefault(x => x.FilmeId == id);
-            if (f == null)
-            {
-                return NotFound();
-            }
-            _context.Filmes.Remove(f);
-            _context.SaveChanges();
+            Result resultado = _service.RemoverFilme(id);
+            if (resultado.IsFailed) return NotFound();
             return NoContent();
         }
     }

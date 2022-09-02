@@ -1,9 +1,10 @@
 ﻿using Alura.Data;
 using Alura.Data.DTOs.EnderecoDTOs;
 using Alura.Models;
+using Alura.Services;
 using AutoMapper;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,66 +14,49 @@ namespace Alura.Controllers
     [Route("[controller]")]
     public class EnderecoController : ControllerBase
     {
-        private FilmeContext _context;
-        private IMapper _mapper;
+        private EnderecoService _service;
 
-        public EnderecoController(FilmeContext context, IMapper mapper)
+        public EnderecoController(EnderecoService service)
         {
-            _context = context;
-            _mapper = mapper;
+            _service = service;
         }
 
         [HttpPost]
         public IActionResult CadastrarEndereco([FromBody]CreateEnderecoDTO enderecoDTO)
         {
-            //conversão usando o mapper, de um createdEnderecoDTO para o tipo Endereco
-            Endereco e = _mapper.Map<Endereco>(enderecoDTO);
-            _context.Enderecos.Add(e);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(BuscarEnderecoPorId), new {Id = e.EnderecoId}, e);
+            HeadEnderecoDTO head = _service.CadastrarEndereco(enderecoDTO); 
+            return CreatedAtAction(nameof(BuscarEnderecoPorId), new {Id = head.EnderecoId}, head);
         }
 
         [HttpGet]
-        public IEnumerable<Endereco> ListarEmdereco()
+        public IActionResult ListarEndereco()
         {
-            return _context.Enderecos;
+            List<HeadEnderecoDTO> lista = _service.ListarEndereco();
+            if (lista == null) return NoContent();
+            return Ok(lista);
         }
 
         [HttpGet("{id}")]
         public IActionResult BuscarEnderecoPorId(int id)
         {
-            Endereco e =  _context.Enderecos.FirstOrDefault(x => x.EnderecoId == id);
-            if(e != null)
-            {
-                HeadEnderecoDTO enderecoDTO = _mapper.Map<HeadEnderecoDTO>(e);
-                return Ok(enderecoDTO);
-            }
+            HeadEnderecoDTO dto = _service.BuscarEnderecoId(id);
+            if (dto == null) return NoContent();
             return NotFound();
         }
 
         [HttpPut("{id}")]
         public IActionResult AtualizarEndereco(int id, [FromBody] UpdateEnderecoDTO enderecoDTO)
         {
-            Endereco e = _context.Enderecos.FirstOrDefault(x => x.EnderecoId == id);
-            if(e == null)
-            {
-                return NotFound();
-            }
-            _mapper.Map(enderecoDTO, e); //jogando as informações do enderecoDTO para o e
-            _context.SaveChanges();
+            Result resultado = _service.AtualizarEndereco(id, enderecoDTO);
+            if (resultado.IsFailed) return NotFound();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult RemoverEmdereco(int id)
         {
-            Endereco e = _context.Enderecos.FirstOrDefault(x => x.EnderecoId == id);
-            if (e == null)
-            {
-                return NotFound();
-            }
-            _context.Enderecos.Remove(e);
-            _context.SaveChanges();
+            Result resultado = _service.RemoverEndereco(id);
+            if(resultado.IsFailed) return NotFound();
             return NoContent();
         }
     }

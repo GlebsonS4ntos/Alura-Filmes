@@ -62,3 +62,5 @@ C:\Users\glebs\Desktop\Alura\Alura\Alura\bin\Debug\net5.0\AutoMapper.dll
 C:\Users\glebs\Desktop\Alura\Alura\Alura\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\glebs\Desktop\Alura\Alura\Alura\bin\Debug\net5.0\Castle.Core.dll
 C:\Users\glebs\Desktop\Alura\Alura\Alura\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Proxies.dll
+C:\Users\glebs\Desktop\Alura\Alura\Alura\bin\Debug\net5.0\FluentResults.dll
+C:\Users\glebs\Desktop\Alura\Alura\Alura\bin\Debug\net5.0\Microsoft.Extensions.Logging.Abstractions.dll

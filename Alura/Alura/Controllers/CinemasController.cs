@@ -1,7 +1,9 @@
 ﻿using Alura.Data;
 using Alura.Data.DTOs.CinemaDTOs;
 using Alura.Models;
+using Alura.Services;
 using AutoMapper;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,79 +15,49 @@ namespace Alura.Controllers
     [Route("[controller]")]
     public class CinemasController : ControllerBase
     {
-        private FilmeContext _context;
-        private IMapper _mapper; 
+        private CinemaService _service; 
 
-        public CinemasController(FilmeContext context, IMapper mapper)
+        public CinemasController(CinemaService service)
         {
-            _context = context;
-            _mapper = mapper;
+            _service = service;
         }
 
         [HttpGet]
         public IActionResult BuscarCinemas([FromQuery] string nomeFilme)
         {
-            List<Cinema> cinemas = _context.Cinemas.ToList();
-            if(cinemas == null)
-            {
-                return NotFound();
-            }
-            if (!string.IsNullOrEmpty(nomeFilme))
-            {
-                IEnumerable<Cinema> query = from cinema in cinemas
-                        where cinema.Sessoes.Any(sessao => 
-                        sessao.Filme.FilmeName.ToUpper() == nomeFilme.ToUpper())
-                        select cinema;
-                cinemas = query.ToList();
-            }
-            List<HeadCinemaDTO> headDTO = _mapper.Map<List<HeadCinemaDTO>>(cinemas);
+            List<HeadCinemaDTO> headDTO = _service.BuscarCinemas(nomeFilme);
+            if(headDTO == null) return NotFound();
             return Ok(headDTO);
         }
 
         [HttpGet("{id}")]
         public IActionResult BuscaCinemaId(int id)
         {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(x => x.CinemaId == id);
-            if (cinema == null)
-            {
-                return NotFound();
-            }
-            HeadCinemaDTO cinemaDto = _mapper.Map<HeadCinemaDTO>(cinema); 
-            return Ok(cinemaDto);
+            HeadCinemaDTO dto = _service.BuscarCinemaId(id);
+            if (dto == null) return NotFound();
+            return Ok(dto);
         }
 
         [HttpPost]
         public IActionResult AdicionarCinema([FromBody]CreatedCinemaDTO c)
         {
-            Cinema cinema = _mapper.Map<Cinema>(c);
-            _context.Cinemas.Add(cinema);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(BuscaCinemaId), new {Id = cinema.CinemaId }, cinema);
+            HeadCinemaDTO dto = _service.AdicionarCinema(c);
+            return CreatedAtAction(nameof(BuscaCinemaId), new {Id = dto.CinemaId }, dto);
         }
 
         [HttpPut("{id}")]
         public IActionResult AtualizarCinema(int id, [FromBody] UpdateCinemaDTO c)
         {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(x => x.CinemaId == id);
-            if(cinema == null)
-            {
-                return NotFound();
-            }
-            _mapper.Map(c, cinema);
-            _context.SaveChanges();
+            Result resultado = _service.AtualizarCinema(c, id);
+            if (resultado.IsFailed) return NotFound();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletarCinema(int id)
         {
-            Cinema c = _context.Cinemas.FirstOrDefault(x => x.CinemaId == id);
-            if (c == null)
-            {
-                return NotFound();
-            }
-            _context.Cinemas.Remove(c);
-            _context.SaveChanges();
+            Result resultado = _service.DeletarCinema(id);
+            if(resultado.IsFailed) return NotFound();
             return NoContent();
         }
     }
