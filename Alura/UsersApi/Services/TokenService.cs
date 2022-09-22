@@ -26,6 +26,9 @@ namespace UsersApi.Services
                 signingCredentials: credenciais,
                 expires: DateTime.UtcNow.AddDays(1)
                 );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            return new Token(tokenString);
         }
     }
 }

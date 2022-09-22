@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using UsersApi.Data.Requests;
 using UsersApi.Services;
 
@@ -20,8 +21,8 @@ namespace UsersApi.Controllers
         public IActionResult Login(LoginRequest request)
         {
             Result resultado = _service.Login(request);
-            if(resultado.IsFailed) return Unauthorized();
-            return Ok();
+            if(resultado.IsFailed) return Unauthorized(resultado.Errors.FirstOrDefault());
+            return Ok(resultado.Successes.FirstOrDefault());
         }
     }
 }

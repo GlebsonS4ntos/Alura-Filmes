@@ -73,3 +73,4 @@ C:\Users\glebs\Desktop\Alura\Alura\UsersApi\obj\Debug\net5.0\UsersApi.genruntime
 C:\Users\glebs\Desktop\Alura\Alura\UsersApi\obj\Debug\net5.0\ref\UsersApi.dll
 C:\Users\glebs\Desktop\Alura\Alura\UsersApi\bin\Debug\net5.0\FluentResults.dll
 C:\Users\glebs\Desktop\Alura\Alura\UsersApi\bin\Debug\net5.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\glebs\Desktop\Alura\Alura\UsersApi\bin\Debug\net5.0\Microsoft.IdentityModel.Abstractions.dll
