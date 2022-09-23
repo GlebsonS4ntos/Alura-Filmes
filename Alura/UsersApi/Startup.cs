@@ -38,6 +38,7 @@ namespace UsersApi
             services.AddScoped<UsuarioService,UsuarioService>();
             services.AddScoped<LoginService, LoginService>();
             services.AddScoped<TokenService, TokenService>();
+            services.AddScoped<LogOutService, LogOutService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
