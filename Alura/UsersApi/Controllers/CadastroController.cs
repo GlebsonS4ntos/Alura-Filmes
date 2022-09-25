@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using UsersApi.Data.Dto;
 using UsersApi.Services;
 
@@ -20,7 +21,7 @@ namespace UsersApi.Controllers
         public IActionResult CadatroUsuario([FromBody] CreateUsuarioDto dto)
         {
             Result resultado = _service.AdicionarUsuario(dto);
-            if (resultado.IsSuccess) return Ok();
+            if (resultado.IsSuccess) return Ok(resultado.Successes.FirstOrDefault());
             return StatusCode(500);
         }
     }
