@@ -2,8 +2,10 @@
 using FluentResults;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UsersApi.Data.Dto;
+using UsersApi.Data.Requests;
 using UsersApi.Models;
 
 namespace UsersApi.Services
@@ -30,6 +32,14 @@ namespace UsersApi.Services
                 return Result.Ok().WithSuccess(codigo); 
             }
             return Result.Fail("Falha ao cadastrar usuario");
+        }
+
+        public Result AtivaContaUsuario(AtivaContaRequest request)
+        {
+            IdentityUser<int> userIdentity = _userManager.Users.FirstOrDefault(u => u.Id == request.UsuarioId);
+            var resultado = _userManager.ConfirmEmailAsync(userIdentity, request.CodigoDeAtivacao).Result;
+            if(resultado.Succeeded) return Result.Ok();
+            return Result.Fail("Erro ao ativar a conta");
         }
     }
 }

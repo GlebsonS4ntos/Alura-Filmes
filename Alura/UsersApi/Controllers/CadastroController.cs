@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using UsersApi.Data.Dto;
+using UsersApi.Data.Requests;
 using UsersApi.Services;
 
 namespace UsersApi.Controllers
@@ -21,6 +22,14 @@ namespace UsersApi.Controllers
         public IActionResult CadatroUsuario([FromBody] CreateUsuarioDto dto)
         {
             Result resultado = _service.AdicionarUsuario(dto);
+            if (resultado.IsSuccess) return Ok(resultado.Successes.FirstOrDefault());
+            return StatusCode(500);
+        }
+
+        [HttpPost("/Ativacao")]
+        public IActionResult AtivaContaUsuario(AtivaContaRequest request)
+        {
+            Result resultado = _service.AtivaContaUsuario(request);
             if (resultado.IsSuccess) return Ok(resultado.Successes.FirstOrDefault());
             return StatusCode(500);
         }
