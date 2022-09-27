@@ -26,11 +26,11 @@ namespace UsersApi.Controllers
             return StatusCode(500);
         }
 
-        [HttpPost("/Ativacao")]
-        public IActionResult AtivaContaUsuario(AtivaContaRequest request)
+        [HttpGet("/Ativacao")]
+        public IActionResult AtivaContaUsuario([FromQuery] AtivaContaRequest request)
         {
             Result resultado = _service.AtivaContaUsuario(request);
-            if (resultado.IsSuccess) return Ok(resultado.Successes.FirstOrDefault());
+            if (resultado.IsSuccess) return Ok();
             return StatusCode(500);
         }
     }
