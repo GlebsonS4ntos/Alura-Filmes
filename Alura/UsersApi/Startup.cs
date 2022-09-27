@@ -33,7 +33,10 @@ namespace UsersApi
             services.AddDbContext<UserDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("UserConnection"))
             );
-            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(otp => otp.SignIn.RequireConfirmedEmail = true)
+            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(otp => { 
+                otp.SignIn.RequireConfirmedEmail = true;
+                otp.User.RequireUniqueEmail = true;
+            })
                 .AddEntityFrameworkStores<UserDbContext>()
                 .AddDefaultTokenProviders();
             services.AddScoped<UsuarioService,UsuarioService>();
