@@ -16,20 +16,24 @@ namespace UsersApi.Services
         private IMapper _mapper;
         private UserManager<IdentityUser<int>> _userManager;
         private EmailService _emailService;
+        private RoleManager<IdentityRole<int>> _roleManager;
 
-        public UsuarioService(IMapper mapper, UserManager<IdentityUser<int>> userManager, EmailService emailService)
+        public UsuarioService(IMapper mapper, UserManager<IdentityUser<int>> userManager, EmailService emailService, RoleManager<IdentityRole<int>> roleManager)
         {
             _mapper = mapper;
             _userManager = userManager;
             _emailService = emailService;
+            _roleManager = roleManager;
         }
 
         public Result AdicionarUsuario(CreateUsuarioDto dto)
         {
             Usuario user = _mapper.Map<Usuario>(dto);
             IdentityUser<int> userIdentity = _mapper.Map<IdentityUser<int>>(user);
-            Task<IdentityResult> resultado = _userManager.CreateAsync(userIdentity, dto.Password);
-            if (resultado.Result.Succeeded) 
+            var resultado = _userManager.CreateAsync(userIdentity, dto.Password).Result;
+            var resultadoRole = _roleManager.CreateAsync(new IdentityRole<int>("admin")).Result;
+            var resultadoRoleUsuario = _userManager.AddToRoleAsync(userIdentity, "admin").Result;
+            if (resultado.Succeeded && resultadoRole.Succeeded && resultadoRoleUsuario.Succeeded) 
             {
                 string codigo = _userManager.GenerateEmailConfirmationTokenAsync(userIdentity).Result;
                 string encode = HttpUtility.UrlEncode(codigo); // O encode vai evitar que ao passar como parametro
