@@ -4,6 +4,7 @@ using Alura.Models;
 using Alura.Services;
 using AutoMapper;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace Alura.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult CadastrarFilme([FromBody]CreateFilmeDTO filmeDTO)
         {
             //conversão usando o mapper, de um createdFilmeDTO para o tipo Filme
